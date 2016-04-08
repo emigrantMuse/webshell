@@ -3,11 +3,13 @@ package Program;
 import java.io.File;
 
 import Global.status;
+import UI.SpecificDesign;
 
-public class RuntheMain {
-public RuntheMain() throws Exception
+public class RuntheMain{
+
+public RuntheMain() throws Exception 
 {
-	/*****
+	 /*****
 	 * 读取目录下的所有文件列表
 	 */
 	GetAllFile step1= new GetAllFile();
@@ -26,4 +28,6 @@ public RuntheMain() throws Exception
 	 */
 	Analysis step3 = new Analysis();
 }
+
+
 }

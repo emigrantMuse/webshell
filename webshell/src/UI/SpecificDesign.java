@@ -9,6 +9,8 @@ import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
 import java.io.File;
 import java.nio.channels.ShutdownChannelGroupException;
 
@@ -26,9 +28,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Global.FileInformation;
+import Global.ResultInformation;
 import Global.status;
 import Program.RuntheMain;
-public class SpecificDesign extends JPanel {
+public class SpecificDesign extends JPanel{
 	
 	JTextField path=new JTextField(30);
 	JTextArea info=new JTextArea(20,25);//高度，宽度
@@ -38,13 +41,15 @@ public class SpecificDesign extends JPanel {
 	JLabel InfoFile = new JLabel("扫描的文件信息");
 	JLabel InfoResult = new JLabel("扫描结果");
 	
+	FileInformation vector_f = FileInformation.getInstance();
+	ResultInformation vector_r = ResultInformation.getInstance();
+	
 	static javax.swing.JFileChooser MyFile=new javax.swing.JFileChooser();
 	//javax.swing.
 
 	public SpecificDesign()
 	{
 		super(new BorderLayout());
-		
 		JMenuBar Menubar = new JMenuBar();
 
 	   	 JMenu StartMenu = new JMenu("开始");
@@ -54,6 +59,7 @@ public class SpecificDesign extends JPanel {
 	   	StartScanMenu.addActionListener(new GetfilepathActionListener());
 	   	JMenuItem StopScanMenu= new JMenuItem("停止扫描");
 	    JMenuItem ExitMenu= new JMenuItem("退出");
+	    ExitMenu.addActionListener(new ExitActionListener());
 	  	JMenuItem InformationMenu= new JMenuItem("工具信息");
 	   	 
 	  	StartMenu.add(StartScanMenu);
@@ -109,9 +115,17 @@ public class SpecificDesign extends JPanel {
 			this.add(ResultOut,BorderLayout.SOUTH);
 			
 	}
-	public void show(String temp)
+	
+	public void ShowResult(String f,double s)
 	{
-		result.setText(info.getText()+temp+"\n"+"------------------------------------------------------");
+		for(int j=0; j<vector_f.size(); j++){
+    		//System.out.println(vector_f.size());
+    		info.append(info.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
+		if(s > 0)
+		    result.setText(result.getText()+f+"\n"+"------------"+"该文件可疑度较高"+"\n"+"熵值为:"+s+"\n"+"------------------------------------------------------"+"\n");
+	    else
+			result.setText(result.getText()+f+"\n"+"------------"+"该文件较为安全"+"\n"+"------------------------------------------------------"+"\n");
+		}
 	}
 	
 	private class GetfilepathActionListener implements ActionListener{  
@@ -134,13 +148,17 @@ public class SpecificDesign extends JPanel {
               //RuntheMain pro = new RuntheMain();
         } 
     }
-	
+	private class ExitActionListener implements ActionListener{  
+        public void actionPerformed(ActionEvent e) {  
+        	System.exit(0);
+        } 
+    }
 	private class AnalysisActionListener implements ActionListener{  
         public void actionPerformed(ActionEvent e) {  
         	if(status.getFilePath() != null)
         	{
             	try {
-    				RuntheMain pro = new RuntheMain();
+    				 new RuntheMain();
     			} catch (Exception e1) {
     				// TODO Auto-generated catch block
     				e1.printStackTrace();
@@ -148,15 +166,21 @@ public class SpecificDesign extends JPanel {
             	/***
             	 * 显示文件信息
             	 */
-            	FileInformation vector = FileInformation.getInstance();
-            	for(int j=0; j<vector.size(); j++){
-            		info.setText(info.getText()+(String) vector.m_element.get(j)+"\n"+"------------------------------------------------------");
-            	//info.setText((String) vector.m_element.get(j));
+            	
+            	double a = 0.0;
+            	for(int j=0; j<vector_f.size(); j++){
+            		//System.out.println(vector_f.size());
+            		info.setText(info.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
+            		if(vector_r.m_element.get(j) > 0)
+            		    result.setText(result.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------"+"该文件可疑度较高"+"\n"+"熵值为:"+vector_r.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
+            	    else
+            			result.setText(result.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------"+"该文件较为安全"+"\n"+"------------------------------------------------------"+"\n");
             		/****
             		 * 
             		 * 显示结果
             		 * 
-            		 */
+            		 **/
+            		//System.out.println("熵值为"+vector_r.m_element.get(j));    
             	}
             }
         	else{
@@ -166,4 +190,6 @@ public class SpecificDesign extends JPanel {
         	}
 
     }
+
+
 }

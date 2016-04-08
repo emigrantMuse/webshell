@@ -6,6 +6,7 @@ public class status {
 	
 	private static  String filepath;
 	private static Vector<String> pro;
+	public static double sum;
 
 	
 	public static void setFilePath(String  file) {
