@@ -8,6 +8,7 @@ import java.util.Vector;
 
 public class FileInformation {
 	public Vector<String> m_element;
+	public static Vector<String> FileCreateTime = new Vector<String>();
 
 	private static FileInformation m_instance;//这是Vector类型的实例
 	public static FileInformation getInstance()

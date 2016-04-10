@@ -11,8 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.channels.ShutdownChannelGroupException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -116,17 +121,14 @@ public class SpecificDesign extends JPanel{
 			
 	}
 	
-	public void ShowResult(String f,double s)
+	
+	public String  getCreateTime(File cfile)
 	{
-		for(int j=0; j<vector_f.size(); j++){
-    		//System.out.println(vector_f.size());
-    		info.append(info.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
-		if(s > 0)
-		    result.setText(result.getText()+f+"\n"+"------------"+"该文件可疑度较高"+"\n"+"熵值为:"+s+"\n"+"------------------------------------------------------"+"\n");
-	    else
-			result.setText(result.getText()+f+"\n"+"------------"+"该文件较为安全"+"\n"+"------------------------------------------------------"+"\n");
-		}
+		 long time = cfile.lastModified();//返回文件最后修改时间，是以个long型毫秒数
+         String ctime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(time));
+		return ctime;
 	}
+
 	
 	private class GetfilepathActionListener implements ActionListener{  
         public void actionPerformed(ActionEvent e) {  
@@ -168,9 +170,12 @@ public class SpecificDesign extends JPanel{
             	 */
             	
             	double a = 0.0;
+            	File createtime;
+            	String ctime;
             	for(int j=0; j<vector_f.size(); j++){
             		//System.out.println(vector_f.size());
-            		info.setText(info.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
+            		createtime = new File(vector_f.m_element.get(j));
+            		info.setText(info.getText()+(String) vector_f.m_element.get(j)+"\n"+"修改日期:"+getCreateTime(createtime)+"\n"+"------------------------------------------------------"+"\n");
             		if(vector_r.m_element.get(j) > 0)
             		    result.setText(result.getText()+(String) vector_f.m_element.get(j)+"\n"+"------------"+"该文件可疑度较高"+"\n"+"熵值为:"+vector_r.m_element.get(j)+"\n"+"------------------------------------------------------"+"\n");
             	    else

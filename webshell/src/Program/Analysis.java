@@ -61,8 +61,6 @@ public class Analysis {
 			}
 			//System.out.println("存入的熵值为"+status.sum);    
 			vector_result.addElement(status.sum);
-			SpecificDesign show_r = new SpecificDesign();
-			show_r.ShowResult(temp, status.sum);
 		}
 	}
 }
