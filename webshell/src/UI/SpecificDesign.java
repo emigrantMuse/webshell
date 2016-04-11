@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import Global.FileInformation;
 import Global.ResultInformation;
 import Global.status;
+import Program.ResultOutput;
 import Program.RuntheMain;
 public class SpecificDesign extends JPanel{
 	
@@ -62,13 +63,14 @@ public class SpecificDesign extends JPanel{
 	   	 
 	   	JMenuItem StartScanMenu= new JMenuItem("选择路径");
 	   	StartScanMenu.addActionListener(new GetfilepathActionListener());
-	   	JMenuItem StopScanMenu= new JMenuItem("停止扫描");
+	   	JMenuItem SaveMenu= new JMenuItem("保存结果");
+	   	SaveMenu.addActionListener(new SaveActionListener());
 	    JMenuItem ExitMenu= new JMenuItem("退出");
 	    ExitMenu.addActionListener(new ExitActionListener());
 	  	JMenuItem InformationMenu= new JMenuItem("工具信息");
 	   	 
 	  	StartMenu.add(StartScanMenu);
-	  	StartMenu.add(StopScanMenu);
+	  	StartMenu.add(SaveMenu);
 	  	StartMenu.add(ExitMenu);
 	  	AboutMenu.add(InformationMenu);
 	  	
@@ -150,11 +152,37 @@ public class SpecificDesign extends JPanel{
               //RuntheMain pro = new RuntheMain();
         } 
     }
+	
 	private class ExitActionListener implements ActionListener{  
         public void actionPerformed(ActionEvent e) {  
         	System.exit(0);
         } 
     }
+	
+	private class SaveActionListener implements ActionListener{  
+        public void actionPerformed(ActionEvent e) {  
+        	if(status.done)
+        	{
+        	MyFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//只能选择目录
+        	File f=null;
+        	 
+        	 try{     
+        		 MyFile.showOpenDialog(null);  //弹出文件选择
+        		 }    
+             catch(HeadlessException head){     
+                  System.out.println("Open File Dialog ERROR!");    
+             }        
+                 f=MyFile.getSelectedFile();    
+                 ResultOutput output = new ResultOutput(f.getPath());
+        	}
+        	else
+        	{
+        		JOptionPane.showMessageDialog(null, "没有可保存的结果!", "错误信息",
+                        JOptionPane.ERROR_MESSAGE);
+        	}
+        } 
+    }
+	
 	private class AnalysisActionListener implements ActionListener{  
         public void actionPerformed(ActionEvent e) {  
         	if(status.getFilePath() != null)

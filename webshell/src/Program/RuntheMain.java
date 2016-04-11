@@ -27,6 +27,7 @@ public RuntheMain() throws Exception
 	 * 载入所有文件并且分析其是否为webshell
 	 */
 	Analysis step3 = new Analysis();
+	status.done = true;
 }
 
 
